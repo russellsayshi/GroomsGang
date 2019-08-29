@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}View purchase{% endblock %}
+
+{% block content %}
+  <h1>Purchase ID {{ id }}</h1>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr><th scope="col">Key</th><th scope="col">Value</th></tr>
+    </thead>
+    <tbody>
+    {% for key, value in purchase.items() %}
+      <tr>
+        <td>{{ capitalize(key.replace("_", " ")) }}</td>
+        {% if key == "added_when" %}
+          <td>{{ time_conv(value) }}</td>
+        {% else %}
+          <td>{{ value }}</td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+  <a href="/finance" class="btn btn-primary">&#171; Back</a>
+  <a href="/purchase/edit/{{ id }}" class="btn btn-secondary">Edit</a>
+{% endblock %}

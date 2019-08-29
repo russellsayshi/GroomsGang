@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+  <h1>Sign In</h1>
+  {% if error %}
+    <div class="alert alert-danger" role="alert">
+      <strong>Error:</strong> {{ error }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  {% endif %}
+  <form action="" method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <p>
+          {{ form.username.label }}<br>
+          {{ form.username(size=32) }}
+          {% for error in form.username.errors %}
+            <div class="alert alert-danger" role="alert">
+              {{ error }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% endfor %}
+      </p>
+      <p>
+          {{ form.password.label }}<br>
+          {{ form.password(size=32) }}
+          {% for error in form.password.errors %}
+            <div class="alert alert-danger" role="alert">
+              {{ error }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% endfor %}
+      </p>
+      <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+      <p>{{ form.submit() }}</p>
+  </form>
+{% endblock %}

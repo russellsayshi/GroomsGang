@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Tasks{% endblock %}
+
+{% block content %}
+  <h1>Tasks</h1>
+  <!-- Note for anyone reading source: weeks are measured since Jan 4, 1970. -->
+  <p>
+    <em>Viewing data for week <b>{{ week }}</b> {% if latest %}(current){% endif %}.</em>
+    {% if tasks %}
+      {% if show_all %}
+        <a href="/tasks/{{ week }}">Hide roommates</a>
+      {% else %}
+        <a href="?show_all">Show roommates</a>
+      {% endif %}
+    {% endif %}
+  </p>
+  {% if tasks %}
+    <br />
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr><th scope="col">Task</th><th scope="col">Assigned</th><th scope="col">?</th></tr>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+          <tr>
+            <td>{{ task.name }}{% if task.overdue %} <em><b>(Overdue!)</b></em>{% endif %}</td>
+            <td>{{ task.assigned_to }}</td>
+            <td>
+              {% if current_user.name.lower() == task.assigned_to.lower() %}
+                {% if task.completed %}
+                  <input type="checkbox" checked onclick="window.location.href='/task/uncomplete/{{ week }}/{{ task.id }}'" />
+                {% else %}
+                  <input type="checkbox" onclick="window.location.href='/task/complete/{{ week }}/{{ task.id }}'" />
+                {% endif %}
+              {% else %}
+                <input type="checkbox" disabled {% if task.completed %}checked{% endif %} />
+              {% endif %}
+            </td>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No tasks found.</p>
+  {% endif %}
+  <a href="/tasks/{{ week-1 }}" class="btn btn-secondary">&#171; Prev</a>
+  {% if latest %}
+    <a href="/tasks/{{ week+1 }}" class="btn pull-right" disabled>Next &#187;</a>
+  {% else %}
+    <a href="/tasks/{{ week+1 }}" class="btn btn-primary pull-right">Next &#187;</a>
+  {% endif %}
+{% endblock %}

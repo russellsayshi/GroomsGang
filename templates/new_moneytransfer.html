@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}New Money Transfer{% endblock %}
+
+{% block extrastyle %}
+<style type="text/css">
+  td {
+    padding: 10px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h1>New money transfer</h1>
+  <form id="form" action="/moneytransfer/add" method="post">
+    <table>
+      <tr>
+        <td>
+          <label for="name">Reason</label>
+        </td>
+        <td>
+          <input name="name" required id="name" type="text" placeholder="Repaying debt" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="transferred_when">Transferred when?</label>
+        </td>
+        <td>
+          <input name="transferred_when" required type="date" id="bought_when" value="{{ date }}" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="who_paid">Who paid?</label>
+        </td>
+        <td>
+          <select name="who_paid" id="who_paid">
+            {% for roommate in roommates %}
+              <option value="{{ roommate.lower() }}" {% if roommate.lower() == current_user.name.lower() %}selected{% endif %}>{{ roommate }}</option>
+            {% endfor %}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">
+          <label for="to_whom">To whom?</label>
+        </td>
+        <td>
+          <select name="to_whom" id="to_whom">
+            {% for roommate in roommates %}
+              <option value="{{ roommate.lower() }}">{{ roommate }}</option>
+            {% endfor %}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="method">Method</label>
+        </td>
+        <td>
+          <select id="method" name="method">
+            {% for method in methods %}
+              <option value="{{ method }}">{{ capitalize(method) }}</option>
+            {% endfor %}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="amount">Amount</label>
+        </td>
+        <td>
+          $<input id="amount" name="amount" type="number" min="0" max="5000" step="0.01" placeholder="10.00" required style="max-width: 70px;" />
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">
+          <label for="additional_info">Additional info</label>
+        </td>
+        <td>
+          <textarea form="form" name="additional_info" id="additional_info"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <input type="submit" value="Save" class="btn btn-primary" />
+        </td>
+      </tr>
+    </table>
+  </form>
+{% endblock %}
