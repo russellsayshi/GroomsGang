@@ -491,9 +491,6 @@ def addusers():
     """
     return "none"
     """
-    russell = User(name='russell', password='hockey5485', authenticated=True)
-    eli = User(name='eli', password='dingbat9824')
-    alex = User(name='alex', password='kgb3762')
     db.create_all()
     db.session.add(russell)
     db.session.add(eli)
