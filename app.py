@@ -247,7 +247,7 @@ def groceries():
         if grocery.bought_when + timedelta(weeks=1) < datetime.datetime.now():
             # has been removed for more than a week
             with open("grocery_log.txt", "a") as f:
-                f.write(str(grocery.id) + "," + grocery.name + "," + str(grocery.quantity) + "," + str(grocery.votes) + "," + str(grocery.recently_bought) + "," + grocery.bought_by + "," + str(grocery.added_when) + "," + str(grocery.bought_when) + "," + grocery.note + "\n")
+                f.write(str(grocery.id) + "," + str(grocery.name) + "," + str(grocery.quantity) + "," + str(grocery.votes) + "," + str(grocery.recently_bought) + "," + str(grocery.bought_by) + "," + str(grocery.added_when) + "," + str(grocery.bought_when) + "," + str(grocery.note) + "\n")
             groceries_to_remove.append(grocery)
     if len(groceries_to_remove) > 0:
         for grocery in groceries_to_remove:
@@ -670,6 +670,15 @@ def inject_week():
     return dict(week=get_week_id())
 """
 
+@app.route('/authenticate_all')
+@login_required
+def authenticate_all():
+    users = User.query.all()
+    for user in users:
+        user.authenticated = True
+    db.session.commit()
+    return "done"
+
 @app.before_request
 def before_request():
     g.start = time.time()
@@ -684,5 +693,10 @@ def after_request(response):
             b'__EXECUTION_TIME__', bytes(str(diff), 'utf-8')))
     return response
 
-app.run()
+import sys
+if len(sys.argv) > 1:
+    from waitress import serve
+    serve(app, host='0.0.0.0', port=5000)
+else:
+    app.run(host='0.0.0.0')
 
