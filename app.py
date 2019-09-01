@@ -244,7 +244,7 @@ def groceries():
     # remove out of date groceries
     groceries_to_remove = []
     for grocery in groceries:
-        if grocery.bought_when + timedelta(weeks=1) < datetime.datetime.now():
+        if grocery.recently_bought and grocery.bought_when + timedelta(weeks=1) < datetime.datetime.now():
             # has been removed for more than a week
             with open("grocery_log.txt", "a") as f:
                 f.write(str(grocery.id) + "," + str(grocery.name) + "," + str(grocery.quantity) + "," + str(grocery.votes) + "," + str(grocery.recently_bought) + "," + str(grocery.bought_by) + "," + str(grocery.added_when) + "," + str(grocery.bought_when) + "," + str(grocery.note) + "\n")
